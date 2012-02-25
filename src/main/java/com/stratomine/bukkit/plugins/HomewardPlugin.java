@@ -102,7 +102,7 @@ public class HomewardPlugin extends JavaPlugin {
 	private void setPlayerCompass(String playerName, Location location) {
 		HashMap<World,Location> compasses = getPlayerCompasses(playerName);
 		compasses.put(location.getWorld(), location);
-		info("Set %s' compass to %s", playerName, location.toString());
+		saveCompasses();
 	}
 	
 	private Location getPlayerCompass(Player player) {
