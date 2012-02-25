@@ -1,10 +1,10 @@
 package com.stratomine.bukkit.plugins;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class HomewardPlayerListener extends org.bukkit.event.player.PlayerListener {
 	
@@ -19,15 +19,22 @@ public class HomewardPlayerListener extends org.bukkit.event.player.PlayerListen
 	}
 	
 	@Override
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		getPlugin().updatePlayerCompass(event.getPlayer());
+	}
+
+	@Override
+	public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
+		getPlugin().updatePlayerCompass(event.getPlayer());
+	}
+
+	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if ((event.getAction() != HOME_ACTION) || (event.getClickedBlock().getType() != HOME_BLOCK) || (event.getMaterial() != HOME_ITEM)) {
 			return;
 		}
-		
-		Location target = event.getClickedBlock().getLocation();
-		Player player = event.getPlayer();
-		player.setCompassTarget(target);
-		player.sendMessage("Your compass is attuned to this location!");
+
+		getPlugin().setPlayerCompass(event.getPlayer(), event.getClickedBlock().getLocation());
 	}
 	
 	public HomewardPlugin getPlugin() {
